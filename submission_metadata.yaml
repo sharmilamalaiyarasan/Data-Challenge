@@ -1,0 +1,97 @@
+# Redrob Hackathon — Submission Metadata
+#
+# AI Recruiter: Hybrid Semantic Ranking System
+# Ranks candidates by true job fit using Sentence Transformers + BM25 + TF-IDF
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "TBD"                   # <-- Replace with your team name before submission
+
+primary_contact:
+  name: "TBD"                       # <-- Replace with full name
+  email: "TBD"                      # <-- Replace with email address
+  phone: "TBD"                      # <-- Replace with +91-XXXXXXXXXX
+
+team_members: []
+# <-- Add members before submission, e.g.:
+#   - name: "Sharmila Malaiyarasan"
+#     email: "your@email.com"
+#     role: "Team Lead / ML Engineer"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/sharmilamalaiyarasan/Data-Challenge.git"
+
+sandbox_link: "TBD"
+# <-- Replace with your Streamlit Cloud / HuggingFace Spaces URL after deployment
+# To deploy locally: streamlit run app.py
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+# Runs in ≤5 minutes on CPU with 16GB RAM, no network required.
+# First run builds candidate_embeddings.npy cache (~3-4 min).
+# Subsequent runs load from cache and finish in <60 seconds.
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local Windows Machine"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11"
+  os: "Windows 11"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true
+  pre_computation_time_minutes: 4   # First-run embedding build; cached on repeat runs
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Gemini (Antigravity)"  # Architecture design, code generation, and review
+
+ai_usage_summary: |
+  Used Gemini AI assistant (Antigravity) for architecture discussion, module design,
+  and code generation scaffolding. All candidate logic, scoring formulas, and
+  feature engineering decisions were human-directed and validated.
+  No candidate data was fed to any external LLM during ranking.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  Hybrid semantic ranking pipeline combining three similarity signals:
+  Sentence Transformers (50%), BM25 Okapi (30%), and TF-IDF (20%) for
+  robust job description matching beyond keyword overlap.
+
+  Logical Consistency Validation: Profiles with impossible employment dates,
+  overlapping full-time roles, expert-level skills with zero experience months,
+  or graduation timeline violations receive a validity_score of 0.0, forcing
+  their final score to zero regardless of semantic match.
+
+  Five-component scoring: semantic_match, skills (proficiency × duration weighted),
+  career_growth (title rank trajectory), founder_mindset (GitHub + startup DNA),
+  and product_experience (product vs service company ratio). Weights adapt
+  dynamically per Recruiter Persona (Startup Founder vs Enterprise Recruiter).
+
+  Risk scoring subtracts penalties for long notice periods (>90 days), job
+  hopping (avg tenure <18 months), and relocation friction. Confidence scores
+  reflect profile completeness and verification signals.
+
+  XAI output: Every candidate receives a structured JSON breakdown with 1–5 star
+  ratings across six dimensions and a factual one-sentence CSV reasoning string.
+
+  Runtime: <60s on CPU after first-run embedding cache is built.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true        # Generalized logical validator catches inconsistent profiles
+  reproduction_tested: true

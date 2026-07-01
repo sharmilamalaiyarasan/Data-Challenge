@@ -1,0 +1,219 @@
+{
+  "CAND_0003430": [
+    "Current job duration mismatch: stated 11 mos vs calculated 15 mos"
+  ],
+  "CAND_0003582": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0005291": [
+    "Current job duration mismatch: stated 11 mos vs calculated 33 mos"
+  ],
+  "CAND_0007353": [
+    "Current job duration mismatch: stated 166 mos vs calculated 33 mos",
+    "Sum of job durations (20.9 yrs) exceeds years_of_experience (9.9 yrs)",
+    "Job 0 duration (13.8 yrs) exceeds total years_of_experience (9.9 yrs)"
+  ],
+  "CAND_0007413": [
+    "Current job duration mismatch: stated 16 mos vs calculated 43 mos"
+  ],
+  "CAND_0008960": [
+    "Current job duration mismatch: stated 171 mos vs calculated 21 mos",
+    "Sum of job durations (22.6 yrs) exceeds years_of_experience (10.3 yrs)",
+    "Job 0 duration (14.2 yrs) exceeds total years_of_experience (10.3 yrs)"
+  ],
+  "CAND_0010294": [
+    "Current job duration mismatch: stated 144 mos vs calculated 19 mos",
+    "Sum of job durations (18.3 yrs) exceeds years_of_experience (8.0 yrs)",
+    "Job 0 duration (12.0 yrs) exceeds total years_of_experience (8.0 yrs)"
+  ],
+  "CAND_0016000": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0018515": [
+    "Current job duration mismatch: stated 150 mos vs calculated 39 mos",
+    "Sum of job durations (17.6 yrs) exceeds years_of_experience (8.5 yrs)",
+    "Job 0 duration (12.5 yrs) exceeds total years_of_experience (8.5 yrs)"
+  ],
+  "CAND_0019480": [
+    "Sum of job durations (7.2 yrs) exceeds years_of_experience (2.8 yrs)"
+  ],
+  "CAND_0024752": [
+    "Current job duration mismatch: stated 8 mos vs calculated 48 mos"
+  ],
+  "CAND_0025579": [
+    "Current job duration mismatch: stated 12 mos vs calculated 26 mos"
+  ],
+  "CAND_0033131": [
+    "Current job duration mismatch: stated 16 mos vs calculated 33 mos"
+  ],
+  "CAND_0033817": [
+    "Expert in 4 skills with 0 duration"
+  ],
+  "CAND_0033972": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0035104": [
+    "Current job duration mismatch: stated 114 mos vs calculated 18 mos",
+    "Sum of job durations (13.5 yrs) exceeds years_of_experience (5.5 yrs)",
+    "Job 0 duration (9.5 yrs) exceeds total years_of_experience (5.5 yrs)"
+  ],
+  "CAND_0036299": [
+    "Current job duration mismatch: stated 8 mos vs calculated 44 mos"
+  ],
+  "CAND_0036839": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0037000": [
+    "Sum of job durations (6.2 yrs) exceeds years_of_experience (2.7 yrs)",
+    "Job 1 duration (4.0 yrs) exceeds total years_of_experience (2.7 yrs)"
+  ],
+  "CAND_0037539": [
+    "Current job duration mismatch: stated 106 mos vs calculated 49 mos",
+    "Sum of job durations (9.6 yrs) exceeds years_of_experience (4.9 yrs)",
+    "Job 0 duration (8.8 yrs) exceeds total years_of_experience (4.9 yrs)"
+  ],
+  "CAND_0038431": [
+    "Current job duration mismatch: stated 16 mos vs calculated 44 mos"
+  ],
+  "CAND_0040075": [
+    "Current job duration mismatch: stated 228 mos vs calculated 39 mos",
+    "Sum of job durations (30.4 yrs) exceeds years_of_experience (15.0 yrs)",
+    "Job 0 duration (19.0 yrs) exceeds total years_of_experience (15.0 yrs)"
+  ],
+  "CAND_0040853": [
+    "Current job duration mismatch: stated 61 mos vs calculated 13 mos",
+    "Sum of job durations (5.1 yrs) exceeds years_of_experience (1.1 yrs)",
+    "Job 0 duration (5.1 yrs) exceeds total years_of_experience (1.1 yrs)"
+  ],
+  "CAND_0042245": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0042453": [
+    "Current job duration mismatch: stated 98 mos vs calculated 50 mos",
+    "Sum of job durations (8.2 yrs) exceeds years_of_experience (4.2 yrs)",
+    "Job 0 duration (8.2 yrs) exceeds total years_of_experience (4.2 yrs)"
+  ],
+  "CAND_0043721": [
+    "Current job duration mismatch: stated 102 mos vs calculated 48 mos",
+    "Sum of job durations (9.0 yrs) exceeds years_of_experience (4.5 yrs)",
+    "Job 0 duration (8.5 yrs) exceeds total years_of_experience (4.5 yrs)"
+  ],
+  "CAND_0046649": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0046689": [
+    "Expert in 4 skills with 0 duration"
+  ],
+  "CAND_0048740": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0053734": [
+    "Current job duration mismatch: stated 151 mos vs calculated 32 mos",
+    "Sum of job durations (18.4 yrs) exceeds years_of_experience (8.6 yrs)",
+    "Job 0 duration (12.6 yrs) exceeds total years_of_experience (8.6 yrs)"
+  ],
+  "CAND_0055685": [
+    "Current job duration mismatch: stated 64 mos vs calculated 16 mos",
+    "Sum of job durations (5.3 yrs) exceeds years_of_experience (1.4 yrs)",
+    "Job 0 duration (5.3 yrs) exceeds total years_of_experience (1.4 yrs)"
+  ],
+  "CAND_0055792": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0056983": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0057711": [
+    "Current job duration mismatch: stated 140 mos vs calculated 51 mos",
+    "Sum of job durations (15.0 yrs) exceeds years_of_experience (7.7 yrs)",
+    "Job 0 duration (11.7 yrs) exceeds total years_of_experience (7.7 yrs)"
+  ],
+  "CAND_0060642": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0061722": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0063888": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0064077": [
+    "Current job duration mismatch: stated 169 mos vs calculated 51 mos",
+    "Sum of job durations (19.8 yrs) exceeds years_of_experience (10.1 yrs)",
+    "Job 0 duration (14.1 yrs) exceeds total years_of_experience (10.1 yrs)"
+  ],
+  "CAND_0065096": [
+    "Expert in 4 skills with 0 duration"
+  ],
+  "CAND_0065710": [
+    "Current job duration mismatch: stated 100 mos vs calculated 38 mos",
+    "Sum of job durations (9.5 yrs) exceeds years_of_experience (4.4 yrs)",
+    "Job 0 duration (8.3 yrs) exceeds total years_of_experience (4.4 yrs)"
+  ],
+  "CAND_0065787": [
+    "Current job duration mismatch: stated 14 mos vs calculated 32 mos"
+  ],
+  "CAND_0066405": [
+    "Current job duration mismatch: stated 13 mos vs calculated 31 mos"
+  ],
+  "CAND_0070189": [
+    "Current job duration mismatch: stated 130 mos vs calculated 39 mos",
+    "Sum of job durations (14.4 yrs) exceeds years_of_experience (6.9 yrs)",
+    "Job 0 duration (10.8 yrs) exceeds total years_of_experience (6.9 yrs)"
+  ],
+  "CAND_0070429": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0072379": [
+    "Expert in 4 skills with 0 duration"
+  ],
+  "CAND_0073853": [
+    "Expert in 5 skills with 0 duration"
+  ],
+  "CAND_0074119": [
+    "Current job duration mismatch: stated 13 mos vs calculated 25 mos"
+  ],
+  "CAND_0077239": [
+    "Current job duration mismatch: stated 139 mos vs calculated 49 mos",
+    "Sum of job durations (15.0 yrs) exceeds years_of_experience (7.6 yrs)",
+    "Job 0 duration (11.6 yrs) exceeds total years_of_experience (7.6 yrs)"
+  ],
+  "CAND_0077250": [
+    "Current job duration mismatch: stated 18 mos vs calculated 32 mos"
+  ],
+  "CAND_0084182": [
+    "Current job duration mismatch: stated 200 mos vs calculated 51 mos",
+    "Sum of job durations (24.9 yrs) exceeds years_of_experience (12.7 yrs)",
+    "Job 0 duration (16.7 yrs) exceeds total years_of_experience (12.7 yrs)"
+  ],
+  "CAND_0086808": [
+    "Current job duration mismatch: stated 15 mos vs calculated 19 mos"
+  ],
+  "CAND_0090900": [
+    "Current job duration mismatch: stated 9 mos vs calculated 38 mos"
+  ],
+  "CAND_0091068": [
+    "Current job duration mismatch: stated 12 mos vs calculated 27 mos"
+  ],
+  "CAND_0093364": [
+    "Current job duration mismatch: stated 142 mos vs calculated 26 mos",
+    "Sum of job durations (17.5 yrs) exceeds years_of_experience (7.9 yrs)",
+    "Job 0 duration (11.8 yrs) exceeds total years_of_experience (7.9 yrs)"
+  ],
+  "CAND_0093547": [
+    "Sum of job durations (6.2 yrs) exceeds years_of_experience (2.9 yrs)",
+    "Job 1 duration (3.6 yrs) exceeds total years_of_experience (2.9 yrs)"
+  ],
+  "CAND_0095140": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0095317": [
+    "Expert in 3 skills with 0 duration"
+  ],
+  "CAND_0095480": [
+    "Expert in 4 skills with 0 duration"
+  ],
+  "CAND_0096150": [
+    "Current job duration mismatch: stated 10 mos vs calculated 25 mos"
+  ]
+}

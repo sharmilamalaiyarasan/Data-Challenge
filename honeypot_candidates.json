@@ -1,0 +1,270 @@
+[
+  {
+    "candidate_id": "CAND_0003430",
+    "reasons": [
+      "Current job duration mismatch: stated 11 mos vs calculated 15 mos (from start date 2025-03-03 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0005291",
+    "reasons": [
+      "Current job duration mismatch: stated 11 mos vs calculated 33 mos (from start date 2023-09-10 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0007353",
+    "reasons": [
+      "Current job duration mismatch: stated 166 mos vs calculated 33 mos (from start date 2023-09-10 to 2026-06-22)",
+      "Total job history duration 20.9 yrs exceeds stated years_of_experience 9.9 yrs",
+      "Job 0 duration 13.8 yrs exceeds total stated years_of_experience 9.9 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0007413",
+    "reasons": [
+      "Current job duration mismatch: stated 16 mos vs calculated 43 mos (from start date 2022-11-14 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0008960",
+    "reasons": [
+      "Current job duration mismatch: stated 171 mos vs calculated 21 mos (from start date 2024-09-04 to 2026-06-22)",
+      "Total job history duration 22.6 yrs exceeds stated years_of_experience 10.3 yrs",
+      "Job 0 duration 14.2 yrs exceeds total stated years_of_experience 10.3 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0010294",
+    "reasons": [
+      "Current job duration mismatch: stated 144 mos vs calculated 19 mos (from start date 2024-11-03 to 2026-06-22)",
+      "Total job history duration 18.3 yrs exceeds stated years_of_experience 8.0 yrs",
+      "Job 0 duration 12.0 yrs exceeds total stated years_of_experience 8.0 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0018515",
+    "reasons": [
+      "Current job duration mismatch: stated 150 mos vs calculated 39 mos (from start date 2023-03-14 to 2026-06-22)",
+      "Total job history duration 17.6 yrs exceeds stated years_of_experience 8.5 yrs",
+      "Job 0 duration 12.5 yrs exceeds total stated years_of_experience 8.5 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0019480",
+    "reasons": [
+      "Total job history duration 7.2 yrs exceeds stated years_of_experience 2.8 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0024752",
+    "reasons": [
+      "Current job duration mismatch: stated 8 mos vs calculated 48 mos (from start date 2022-06-17 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0025579",
+    "reasons": [
+      "Current job duration mismatch: stated 12 mos vs calculated 26 mos (from start date 2024-04-07 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0033131",
+    "reasons": [
+      "Current job duration mismatch: stated 16 mos vs calculated 33 mos (from start date 2023-09-10 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0035104",
+    "reasons": [
+      "Current job duration mismatch: stated 114 mos vs calculated 18 mos (from start date 2024-12-03 to 2026-06-22)",
+      "Total job history duration 13.5 yrs exceeds stated years_of_experience 5.5 yrs",
+      "Job 0 duration 9.5 yrs exceeds total stated years_of_experience 5.5 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0036299",
+    "reasons": [
+      "Current job duration mismatch: stated 8 mos vs calculated 44 mos (from start date 2022-10-15 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0037000",
+    "reasons": [
+      "Total job history duration 6.2 yrs exceeds stated years_of_experience 2.7 yrs",
+      "Job 1 duration 4.0 yrs exceeds total stated years_of_experience 2.7 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0037539",
+    "reasons": [
+      "Current job duration mismatch: stated 106 mos vs calculated 49 mos (from start date 2022-05-18 to 2026-06-22)",
+      "Total job history duration 9.6 yrs exceeds stated years_of_experience 4.9 yrs",
+      "Job 0 duration 8.8 yrs exceeds total stated years_of_experience 4.9 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0038431",
+    "reasons": [
+      "Current job duration mismatch: stated 16 mos vs calculated 44 mos (from start date 2022-10-15 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0040075",
+    "reasons": [
+      "Current job duration mismatch: stated 228 mos vs calculated 39 mos (from start date 2023-03-14 to 2026-06-22)",
+      "Total job history duration 30.4 yrs exceeds stated years_of_experience 15.0 yrs",
+      "Job 0 duration 19.0 yrs exceeds total stated years_of_experience 15.0 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0040853",
+    "reasons": [
+      "Current job duration mismatch: stated 61 mos vs calculated 13 mos (from start date 2025-05-02 to 2026-06-22)",
+      "Total job history duration 5.1 yrs exceeds stated years_of_experience 1.1 yrs",
+      "Job 0 duration 5.1 yrs exceeds total stated years_of_experience 1.1 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0042453",
+    "reasons": [
+      "Current job duration mismatch: stated 98 mos vs calculated 50 mos (from start date 2022-04-18 to 2026-06-22)",
+      "Total job history duration 8.2 yrs exceeds stated years_of_experience 4.2 yrs",
+      "Job 0 duration 8.2 yrs exceeds total stated years_of_experience 4.2 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0043721",
+    "reasons": [
+      "Current job duration mismatch: stated 102 mos vs calculated 48 mos (from start date 2022-06-17 to 2026-06-22)",
+      "Total job history duration 9.0 yrs exceeds stated years_of_experience 4.5 yrs",
+      "Job 0 duration 8.5 yrs exceeds total stated years_of_experience 4.5 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0053734",
+    "reasons": [
+      "Current job duration mismatch: stated 151 mos vs calculated 32 mos (from start date 2023-10-10 to 2026-06-22)",
+      "Total job history duration 18.4 yrs exceeds stated years_of_experience 8.6 yrs",
+      "Job 0 duration 12.6 yrs exceeds total stated years_of_experience 8.6 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0055685",
+    "reasons": [
+      "Current job duration mismatch: stated 64 mos vs calculated 16 mos (from start date 2025-02-01 to 2026-06-22)",
+      "Total job history duration 5.3 yrs exceeds stated years_of_experience 1.4 yrs",
+      "Job 0 duration 5.3 yrs exceeds total stated years_of_experience 1.4 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0057711",
+    "reasons": [
+      "Current job duration mismatch: stated 140 mos vs calculated 51 mos (from start date 2022-03-19 to 2026-06-22)",
+      "Total job history duration 15.0 yrs exceeds stated years_of_experience 7.7 yrs",
+      "Job 0 duration 11.7 yrs exceeds total stated years_of_experience 7.7 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0064077",
+    "reasons": [
+      "Current job duration mismatch: stated 169 mos vs calculated 51 mos (from start date 2022-03-19 to 2026-06-22)",
+      "Total job history duration 19.8 yrs exceeds stated years_of_experience 10.1 yrs",
+      "Job 0 duration 14.1 yrs exceeds total stated years_of_experience 10.1 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0065710",
+    "reasons": [
+      "Current job duration mismatch: stated 100 mos vs calculated 38 mos (from start date 2023-04-13 to 2026-06-22)",
+      "Total job history duration 9.5 yrs exceeds stated years_of_experience 4.4 yrs",
+      "Job 0 duration 8.3 yrs exceeds total stated years_of_experience 4.4 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0065787",
+    "reasons": [
+      "Current job duration mismatch: stated 14 mos vs calculated 32 mos (from start date 2023-10-10 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0066405",
+    "reasons": [
+      "Current job duration mismatch: stated 13 mos vs calculated 31 mos (from start date 2023-11-09 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0070189",
+    "reasons": [
+      "Current job duration mismatch: stated 130 mos vs calculated 39 mos (from start date 2023-03-14 to 2026-06-22)",
+      "Total job history duration 14.4 yrs exceeds stated years_of_experience 6.9 yrs",
+      "Job 0 duration 10.8 yrs exceeds total stated years_of_experience 6.9 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0074119",
+    "reasons": [
+      "Current job duration mismatch: stated 13 mos vs calculated 25 mos (from start date 2024-05-07 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0077239",
+    "reasons": [
+      "Current job duration mismatch: stated 139 mos vs calculated 49 mos (from start date 2022-05-18 to 2026-06-22)",
+      "Total job history duration 15.0 yrs exceeds stated years_of_experience 7.6 yrs",
+      "Job 0 duration 11.6 yrs exceeds total stated years_of_experience 7.6 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0077250",
+    "reasons": [
+      "Current job duration mismatch: stated 18 mos vs calculated 32 mos (from start date 2023-10-10 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0084182",
+    "reasons": [
+      "Current job duration mismatch: stated 200 mos vs calculated 51 mos (from start date 2022-03-19 to 2026-06-22)",
+      "Total job history duration 24.9 yrs exceeds stated years_of_experience 12.7 yrs",
+      "Job 0 duration 16.7 yrs exceeds total stated years_of_experience 12.7 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0086808",
+    "reasons": [
+      "Current job duration mismatch: stated 15 mos vs calculated 19 mos (from start date 2024-11-03 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0090900",
+    "reasons": [
+      "Current job duration mismatch: stated 9 mos vs calculated 38 mos (from start date 2023-04-13 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0091068",
+    "reasons": [
+      "Current job duration mismatch: stated 12 mos vs calculated 27 mos (from start date 2024-03-08 to 2026-06-22)"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0093364",
+    "reasons": [
+      "Current job duration mismatch: stated 142 mos vs calculated 26 mos (from start date 2024-04-07 to 2026-06-22)",
+      "Total job history duration 17.5 yrs exceeds stated years_of_experience 7.9 yrs",
+      "Job 0 duration 11.8 yrs exceeds total stated years_of_experience 7.9 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0093547",
+    "reasons": [
+      "Total job history duration 6.2 yrs exceeds stated years_of_experience 2.9 yrs",
+      "Job 1 duration 3.6 yrs exceeds total stated years_of_experience 2.9 yrs"
+    ]
+  },
+  {
+    "candidate_id": "CAND_0096150",
+    "reasons": [
+      "Current job duration mismatch: stated 10 mos vs calculated 25 mos (from start date 2024-05-07 to 2026-06-22)"
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+# Core data science
+numpy
+pandas
+scikit-learn
+
+# NLP / similarity
+sentence-transformers
+rank-bm25
+
+# Streamlit UI
+streamlit
+
+# Utilities
+tqdm
+pyyaml
+joblib
