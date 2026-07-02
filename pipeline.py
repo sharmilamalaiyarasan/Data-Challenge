@@ -39,16 +39,20 @@ from reasoning_engine import generate_explainability
 # ─────────────────────────────────────────────────────────────────────────────
 
 def load_candidates(candidates_path: str) -> list:
-    """Reads a .jsonl file and returns a list of candidate dicts."""
+    """Reads a .jsonl or .json file and returns a list of candidate dicts."""
     candidates = []
-    with open(candidates_path, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                try:
-                    candidates.append(json.loads(line))
-                except json.JSONDecodeError:
-                    pass
+    if candidates_path.endswith(".json"):
+        with open(candidates_path, "r", encoding="utf-8") as f:
+            candidates = json.load(f)
+    else:
+        with open(candidates_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        candidates.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        pass
     print(f"  Loaded {len(candidates):,} candidates from {candidates_path}")
     return candidates
 

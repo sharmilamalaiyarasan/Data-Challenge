@@ -41,7 +41,7 @@ def _find_file(filename: str) -> str | None:
     return None
 
 
-_candidates_path = _find_file("candidates.jsonl")
+_candidates_path = _find_file("candidates.jsonl") or _find_file("sample_candidates.json")
 _jd_path         = _find_file("job_description.md")
 
 
@@ -168,8 +168,8 @@ with st.sidebar:
                 unsafe_allow_html=True,
             )
 
-    _status(candidates_path, "candidates.jsonl")
-    _status(jd_path, "job_description.md")
+    _status(candidates_path, os.path.basename(candidates_path) if candidates_path else "candidates.jsonl")
+    _status(jd_path, os.path.basename(jd_path) if jd_path else "job_description.md")
     persona = st.selectbox(
         "Recruiter Persona",
         options=list(config.PERSONAS.keys()),
@@ -230,8 +230,8 @@ if "run_time" not in st.session_state: st.session_state.run_time = None
 if run_btn:
     if not candidates_path or not os.path.exists(candidates_path):
         st.error(
-            "❌ **candidates.jsonl** could not be found automatically. "
-            "Make sure the file is in the same directory as `app.py`."
+            "❌ No candidate file (**candidates.jsonl** or **sample_candidates.json**) could be found automatically. "
+            "Please ensure at least one of these files exists in the repository directory."
         )
     else:
         with st.spinner("Running ranking pipeline… (first run builds embedding cache ~3 min)"):
