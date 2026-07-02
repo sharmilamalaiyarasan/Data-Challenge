@@ -189,11 +189,13 @@ with st.sidebar:
     st.markdown("### 🎛️ Score Weights")
     st.caption("Override the persona defaults")
 
-    w_semantic = st.slider("Semantic Match",     0.0, 1.0, 0.25, 0.05)
-    w_skills   = st.slider("Skills",             0.0, 1.0, 0.25, 0.05)
+    w_semantic = st.slider("Semantic Match",     0.0, 1.0, 0.20, 0.05)
+    w_skills   = st.slider("Skills",             0.0, 1.0, 0.20, 0.05)
     w_growth   = st.slider("Career Growth",      0.0, 1.0, 0.15, 0.05)
-    w_founder  = st.slider("Founder Mindset",    0.0, 1.0, 0.20, 0.05)
+    w_founder  = st.slider("Founder Mindset",    0.0, 1.0, 0.15, 0.05)
     w_product  = st.slider("Product Experience", 0.0, 1.0, 0.15, 0.05)
+    w_role     = st.slider("Role Relevance",     0.0, 1.0, 0.15, 0.05,
+                           help="Semantic similarity between the candidate's career trajectory and the target role")
 
     custom_weights = {
         "semantic_match":     w_semantic,
@@ -201,6 +203,7 @@ with st.sidebar:
         "career_growth":      w_growth,
         "founder_mindset":    w_founder,
         "product_experience": w_product,
+        "role_relevance":     w_role,
     }
 
     run_btn = st.button("🚀 Run Ranking", use_container_width=True, type="primary")
@@ -326,10 +329,11 @@ if st.session_state.results:
     <div class="metric-box"><div>{pill_html}</div><div class="metric-lbl">Verdict</div></div>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px;">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:4px;">
     <div><div class="section-header">Skills</div><div class="stars">{stars(bd.get('skills',3))}</div></div>
     <div><div class="section-header">Experience</div><div class="stars">{stars(bd.get('experience',3))}</div></div>
     <div><div class="section-header">Career</div><div class="stars">{stars(bd.get('career',3))}</div></div>
+    <div><div class="section-header" title="Role Relevance: based on semantic similarity of career trajectory to target role">Role Fit</div><div class="stars">{stars(bd.get('role_relevance',3))}</div></div>
     <div><div class="section-header">Culture</div><div class="stars">{stars(bd.get('culture',3))}</div></div>
     <div><div class="section-header">Availability</div><div class="stars">{stars(bd.get('availability',3))}</div></div>
   </div>
@@ -389,6 +393,7 @@ if st.session_state.results:
                 "Candidate ID": r["candidate_id"],
                 "Score":        round(r["final_score"], 2),
                 "Confidence":   round(r["confidence"], 1),
+                "Role Fit":     f"{r.get('role_relevance', 0.0):.1f}%" if 'role_relevance' in r else "—",
                 "Risk":         (r.get("explainability") or {}).get("breakdown", {}).get("risk", "—"),
                 "Verdict":      (r.get("explainability") or {}).get("recommendation", "—"),
                 "Reasoning":    r["reasoning"],

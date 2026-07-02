@@ -23,7 +23,8 @@ from tqdm import tqdm
 
 # Local
 import config
-from embedding_engine import assemble_candidate_text, build_or_load_embeddings
+from embedding_engine import assemble_candidate_text, build_or_load_embeddings, build_or_load_role_embeddings
+
 from parser import parse_jd
 from reasoning_engine import generate_explainability
 from scoring_engine import compute_candidate_score
@@ -141,6 +142,19 @@ def run_pipeline(
     )
     print(f"  Hybrid similarity computed for {len(hybrid_scores):,} candidates.")
 
+    # ── Step 5.5: Compute Role Relevance ─────────────────────────────────────
+    print("\n[5.5/7] Computing semantic role relevance scores…")
+    role_embeddings = build_or_load_role_embeddings(candidates, model=model)
+    target_role_descriptor = jd_config.get("target_role_descriptor", "Senior AI Engineer")
+    print(f"  Target role descriptor for embedding comparison: '{target_role_descriptor}'")
+    target_role_emb = model.encode([target_role_descriptor], convert_to_numpy=True).astype(np.float32)
+
+    # Cosine similarity
+    target_role_norm = target_role_emb / np.linalg.norm(target_role_emb, axis=1, keepdims=True)
+    role_norms = role_embeddings / np.linalg.norm(role_embeddings, axis=1, keepdims=True)
+    role_relevance_scores = np.dot(role_norms, target_role_norm.T).squeeze()
+    role_relevance_scores = np.clip(role_relevance_scores, 0.0, 1.0)
+
     # ── Step 6: Scoring & Feature Extraction ─────────────────────────────────
     print("\n[6/7] Scoring and extracting features…")
     results = []
@@ -162,14 +176,18 @@ def run_pipeline(
                     "components": {
                         "semantic": 0.0, "skills": 0.0, "progression": 0.0,
                         "founder": 0.0,  "product": 0.0, "experience":  0.0,
+                        "role_relevance": 0.0,
                     },
                 },
                 validity_score=0.0,
                 invalid_reasons=invalid_reasons,
+                target_skills=target_skills,
             )
             results.append({
                 "candidate_id":   cid,
                 "final_score":    0.0,
+                "role_relevance": 0.0,
+                "semantic_match": 0.0,
                 "confidence":     0.0,
                 "reasoning":      explanation["csv_reasoning"],
                 "explainability": explanation,
@@ -180,23 +198,34 @@ def run_pipeline(
             candidate=candidate,
             hybrid_similarity=float(hybrid_scores[i]),
             target_skills=target_skills,
+            role_relevance=float(role_relevance_scores[i]),
             persona=persona,
             jd_weights=jd_weights,
         )
 
         # Final score = validity (1.0) × (relevance − risk_penalty)
-        final_score = round(validity_score * scores["raw_relevance_minus_risk"], 4)
+        final_score = validity_score * scores["raw_relevance_minus_risk"]
+
+        # Tiny tie-breaker adjustment to make candidate scores slightly distinct based on role and semantic fit
+        if final_score > 0.0:
+            final_score += (scores.get("components", {}).get("role_relevance", 0.0) * 1e-6 +
+                            scores.get("components", {}).get("semantic", 0.0) * 1e-8)
+
+        final_score = round(final_score, 4)
 
         explanation = generate_explainability(
             candidate=candidate,
             scores_dict=scores,
             validity_score=validity_score,
             invalid_reasons=[],
+            target_skills=target_skills,
         )
 
         results.append({
             "candidate_id":   cid,
             "final_score":    final_score,
+            "role_relevance": scores.get("components", {}).get("role_relevance", 0.0),
+            "semantic_match": scores.get("components", {}).get("semantic", 0.0),
             "confidence":     round(scores["confidence"], 2),
             "reasoning":      explanation["csv_reasoning"],
             "explainability": explanation,

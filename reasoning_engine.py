@@ -42,6 +42,7 @@ def build_feature_contribution(scores_dict: dict, weights: dict = None) -> list:
         ("Career Growth",     comps.get("progression", 0)),
         ("Founder Mindset",   comps.get("founder", 0)),
         ("Product Pedigree",  comps.get("product", 0)),
+        ("Role Relevance",    comps.get("role_relevance", 0)),
     ]
 
     total_raw = sum(v for _, v in labels) or 1.0
@@ -66,7 +67,8 @@ def build_feature_contribution(scores_dict: dict, weights: dict = None) -> list:
 
 
 def generate_explainability(candidate: dict, scores_dict: dict,
-                             validity_score: float, invalid_reasons: list) -> dict:
+                             validity_score: float, invalid_reasons: list,
+                             target_skills: dict = None) -> dict:
     """
     Constructs a structured JSON API output and a factual CSV reasoning string.
     """
@@ -81,7 +83,16 @@ def generate_explainability(candidate: dict, scores_dict: dict,
     curr_title  = profile.get("current_title", "Engineer") or "Engineer"
     notice_days = int(signals.get("notice_period_days", 0) or 0)
     location    = profile.get("location", "") or ""
+    
     matched     = scores_dict.get("matched_skills", [])
+    if target_skills and matched:
+        # Sort matched skills by their parsed JD weight descending (higher signal skills first)
+        def get_skill_weight(sk_name):
+            for t_sk, wt in target_skills.items():
+                if t_sk.lower() == sk_name.lower():
+                    return wt
+            return 0.0
+        matched = sorted(matched, key=get_skill_weight, reverse=True)
 
     # ── Invalid profile shortcut ─────────────────────────────────────────────
     if validity_score == 0.0:
@@ -118,6 +129,7 @@ def generate_explainability(candidate: dict, scores_dict: dict,
     exp_stars     = get_star_rating(comps.get("experience", 0))
     career_stars  = get_star_rating(comps.get("progression", 0))
     culture_stars = get_star_rating(comps.get("founder", 0))
+    role_stars    = get_star_rating(comps.get("role_relevance", 0))
 
     # Availability (notice period → score)
     avail_raw   = max(0.0, 100.0 - (notice_days / 150.0) * 100.0)
@@ -143,6 +155,8 @@ def generate_explainability(candidate: dict, scores_dict: dict,
         strengths.append("Demonstrated startup/leadership mindset")
     if comps.get("product", 0) > 75:
         strengths.append("Predominantly product-company background")
+    if comps.get("role_relevance", 0) > 75:
+        strengths.append("High role relevance / background fit")
     if signals.get("open_to_work_flag"):
         strengths.append("Actively open to opportunities")
     if notice_days <= 30 and notice_days >= 0:
@@ -161,6 +175,8 @@ def generate_explainability(candidate: dict, scores_dict: dict,
             weaknesses.append(
                 f"Frequent job changes (avg tenure {avg_t:.0f} months)"
             )
+    if comps.get("role_relevance", 0) < 35:
+        weaknesses.append("Low background alignment with target role")
     if not matched:
         weaknesses.append("No direct skill overlap with JD requirements")
     if comps.get("experience", 0) < 40:
@@ -204,12 +220,13 @@ def generate_explainability(candidate: dict, scores_dict: dict,
         "overall_score":         round(final, 2),
         "confidence":            round(confidence, 2),
         "breakdown": {
-            "skills":       skills_stars,
-            "experience":   exp_stars,
-            "career":       career_stars,
-            "culture":      culture_stars,
-            "availability": avail_stars,
-            "risk":         risk_label,
+            "skills":          skills_stars,
+            "experience":      exp_stars,
+            "career":          career_stars,
+            "culture":         culture_stars,
+            "availability":    avail_stars,
+            "role_relevance":  role_stars,
+            "risk":            risk_label,
         },
         "strengths":              strengths,
         "weaknesses":             weaknesses,
@@ -217,3 +234,4 @@ def generate_explainability(candidate: dict, scores_dict: dict,
         "feature_contributions":  feature_contribs,
         "csv_reasoning":          csv_reasoning,
     }
+

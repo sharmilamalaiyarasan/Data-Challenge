@@ -185,7 +185,7 @@ def compute_confidence_score(candidate):
 
 
 def compute_candidate_score(candidate, hybrid_similarity, target_skills,
-                            persona="startup_founder", jd_weights=None):
+                            role_relevance=0.0, persona="startup_founder", jd_weights=None):
     """
     Full scoring aggregation.
 
@@ -213,6 +213,7 @@ def compute_candidate_score(candidate, hybrid_similarity, target_skills,
 
     similarity_score = hybrid_similarity * 100.0
     product_score    = product_dna * 100.0
+    role_relevance_score = role_relevance * 100.0
 
     # ── Weight selection: JD-parsed weights > persona defaults ───────────────
     weights = jd_weights if jd_weights else config.PERSONAS[persona]["weights"]
@@ -223,6 +224,7 @@ def compute_candidate_score(candidate, hybrid_similarity, target_skills,
         "career_growth":      progression_score,
         "founder_mindset":    founder_mindset_score,
         "product_experience": product_score,
+        "role_relevance":     role_relevance_score,
     }
 
     # ── Weighted relevance (normalised to 0–100) ─────────────────────────────
@@ -261,5 +263,6 @@ def compute_candidate_score(candidate, hybrid_similarity, target_skills,
             "founder":     founder_mindset_score,
             "product":     product_score,
             "experience":  experience_score,
+            "role_relevance": role_relevance_score,
         },
     }

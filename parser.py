@@ -75,19 +75,21 @@ def parse_job_description(jd_text):
 
     if founder_counts >= 3:
         weights_adjustment = {
-            "founder_mindset":    0.25,
-            "semantic_match":     0.25,
-            "skills":             0.25,
-            "career_growth":      0.15,
+            "founder_mindset":    0.21,
+            "semantic_match":     0.21,
+            "skills":             0.21,
+            "career_growth":      0.12,
             "product_experience": 0.10,
+            "role_relevance":     0.15
         }
     else:
         weights_adjustment = {
-            "founder_mindset":    0.15,
-            "semantic_match":     0.25,
-            "skills":             0.30,
+            "founder_mindset":    0.12,
+            "semantic_match":     0.21,
+            "skills":             0.25,
             "career_growth":      0.15,
-            "product_experience": 0.15,
+            "product_experience": 0.12,
+            "role_relevance":     0.15
         }
 
     title_keywords = [
@@ -95,11 +97,23 @@ def parse_job_description(jd_text):
         "retrieval", "ranking", "data scientist",
     ]
 
+    # Extract target role dynamically from first line or headers
+    # E.g. "Job Description: Senior AI Engineer — Founding Team" -> "Senior AI Engineer"
+    title_match = re.search(r"(?:job description|title):\s*([^\n\-\—\|]+)", jd_text, re.IGNORECASE)
+    target_role = title_match.group(1).strip() if title_match else "Senior AI Engineer"
+
+    # Select top 4 skills with weight >= 1.0 to build descriptor
+    sorted_skills = sorted(target_skills.items(), key=lambda x: -x[1])
+    top_skills = [sk for sk, wt in sorted_skills if wt >= 1.0][:4]
+    target_role_descriptor = f"{target_role} specializing in {', '.join(top_skills)}"
+
     return {
-        "target_skills":      target_skills,
-        "weights":            weights_adjustment,   # primary key read by pipeline.py
-        "weights_adjustment": weights_adjustment,   # kept for backwards compatibility
-        "title_keywords":     title_keywords,
+        "target_skills":          target_skills,
+        "weights":                weights_adjustment,   # primary key read by pipeline.py
+        "weights_adjustment":     weights_adjustment,   # kept for backwards compatibility
+        "title_keywords":         title_keywords,
+        "target_role":            target_role,
+        "target_role_descriptor": target_role_descriptor
     }
 
 

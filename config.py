@@ -16,6 +16,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Cache file paths
 EMBEDDING_CACHE_FILE = os.path.join(CACHE_DIR, "candidate_embeddings.npy")
+ROLE_RELEVANCE_CACHE_FILE = os.path.join(CACHE_DIR, "role_embeddings.npy")
 FEATURES_CACHE_FILE = os.path.join(CACHE_DIR, "candidate_features.pkl")
 SKILLS_CACHE_FILE = os.path.join(CACHE_DIR, "normalized_skills.pkl")
 BM25_CACHE_FILE = os.path.join(CACHE_DIR, "bm25_index.pkl")
@@ -28,22 +29,25 @@ PERSONAS = {
     "startup_founder": {
         "description": "Prioritizes startup pedigree, growth velocity, and a hacker/builder mindset.",
         "weights": {
-            "semantic_match": 0.25,
-            "skills": 0.25,
+            "semantic_match": 0.20,
+            "skills": 0.20,
             "career_growth": 0.15,
-            "founder_mindset": 0.20,
-            "product_experience": 0.15
+            "founder_mindset": 0.15,
+            "product_experience": 0.15,
+            "role_relevance": 0.15
         }
     },
     "enterprise_recruiter": {
         "description": "Prioritizes stability, tenure, certifications, and traditional education tiering.",
         "weights": {
-            "semantic_match": 0.20,
-            "skills": 0.30,
+            "semantic_match": 0.15,
+            "skills": 0.25,
             "career_growth": 0.10,
             "founder_mindset": 0.05,
             "product_experience": 0.10,
-            "stability": 0.25
+            "stability": 0.20,
+            "role_relevance": 0.15
         }
     }
 }
+
