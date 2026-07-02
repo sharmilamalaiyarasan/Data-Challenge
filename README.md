@@ -322,7 +322,6 @@ The dashboard provides:
 | Repository | [Data-Challenge](https://github.com/sharmilamalaiyarasan/Data-Challenge) |
 | Streamlit App | [data-challenge-result.streamlit.app](https://data-challenge-result.streamlit.app/) |
 | Team Name | Velmora |
-| Contact | Sharmila Malaiyarasan (sharmilamalaiyarasan@gmail.com) |
 
 ---
 
