@@ -320,8 +320,9 @@ The dashboard provides:
 |---|---|
 | GitHub | [github.com/sharmilamalaiyarasan](https://github.com/sharmilamalaiyarasan) |
 | Repository | [Data-Challenge](https://github.com/sharmilamalaiyarasan/Data-Challenge) |
-| Team Name | TBD — update in `submission_metadata.yaml` before submission |
-| Contact | TBD — update in `submission_metadata.yaml` before submission |
+| Streamlit App | [data-challenge-result.streamlit.app](https://data-challenge-result.streamlit.app/) |
+| Team Name | Velmora |
+| Contact | Sharmila Malaiyarasan (sharmilamalaiyarasan@gmail.com) |
 
 ---
 

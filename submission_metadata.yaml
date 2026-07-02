@@ -36,7 +36,7 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/sharmilamalaiyarasan/Data-Challenge.git"
 
-sandbox_link: "TBD"
+sandbox_link: "https://data-challenge-result.streamlit.app/"
 # <-- Replace with your Streamlit Cloud / HuggingFace Spaces URL after deployment
 # To deploy locally: streamlit run app.py
 
