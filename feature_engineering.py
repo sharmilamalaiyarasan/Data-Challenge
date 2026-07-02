@@ -1,203 +1,204 @@
+"""
+feature_engineering.py — Candidate feature extraction for the AI Recruiter pipeline.
+
+Computes structured signals used by the scoring engine:
+    - Career progression score
+    - Founder mindset score
+    - Product DNA fraction
+    - Skill freshness coefficient
+    - Notice period and location modifiers
+    - Behavioral engagement multiplier
+"""
+
+# Standard library
 from datetime import datetime
-import re
+
+# Local
 from utils import parse_date
 
-# Services firms list for DNA checking
+
+# IT services companies (career at these penalises product DNA score)
 SERVICES_COMPANIES = {
-    "tcs", "wipro", "infosys", "accenture", "cognizant", "capgemini", 
-    "tech mahindra", "hcl", "mphasis", "mindtree", "genpact", "l&t", "tata consultancy"
+    "tcs", "wipro", "infosys", "accenture", "cognizant", "capgemini",
+    "tech mahindra", "hcl", "mphasis", "mindtree", "genpact", "l&t",
+    "tata consultancy",
 }
 
+# Maps title keywords to an ordinal seniority rank
 TITLE_RANKS = {
-    "intern": 1,
-    "associate": 2,
-    "junior": 2,
-    "engineer": 3,
-    "developer": 3,
-    "analyst": 3,
-    "senior": 4,
-    "lead": 5,
-    "manager": 5,
-    "staff": 5,
-    "principal": 5,
-    "director": 6,
-    "founder": 6,
-    "cto": 6,
-    "ceo": 6,
-    "head": 6
+    "intern":     1,
+    "associate":  2,
+    "junior":     2,
+    "engineer":   3,
+    "developer":  3,
+    "analyst":    3,
+    "senior":     4,
+    "lead":       5,
+    "manager":    5,
+    "staff":      5,
+    "principal":  5,
+    "director":   6,
+    "founder":    6,
+    "cto":        6,
+    "ceo":        6,
+    "head":       6,
 }
+
 
 def get_title_rank(title):
+    """Returns the ordinal seniority rank for a job title string."""
     if not title:
         return 2
     title_lower = title.lower()
     for keyword, rank in TITLE_RANKS.items():
         if keyword in title_lower:
             return rank
-    return 3 # default rank for standard engineers
+    return 3  # default: standard IC engineer
+
 
 def calculate_career_progression(history):
     """
-    Computes a career progression score (0-100).
-    Looks at title rank increases and average job tenure.
+    Computes a career progression score (0–100).
+
+    Rewards upward title trajectory and penalises extreme job-hopping
+    (average tenure < 18 months). Bonuses for average tenure > 36 months.
     """
     if not history:
         return 50
-    
-    # Sort history by start date (oldest first)
-    sorted_history = []
-    for job in history:
-        start_str = job.get("start_date")
-        if start_str:
-            dt = parse_date(start_str)
-            if dt:
-                sorted_history.append((dt, job))
-    sorted_history.sort(key=lambda x: x[0])
-    
+
+    # Sort career history chronologically (oldest first)
+    sorted_history = sorted(
+        [(parse_date(j.get("start_date")), j) for j in history if j.get("start_date")],
+        key=lambda x: x[0] or datetime.min,
+    )
+
     if not sorted_history:
         return 50
-        
+
     ranks = [get_title_rank(item[1].get("title")) for item in sorted_history]
-    
-    # Career progression logic
-    rank_growth = 0
+
+    rank_growth = 0.0
     if len(ranks) > 1:
-        # Check if rank increases over time
-        growth_steps = 0
-        for i in range(1, len(ranks)):
-            if ranks[i] > ranks[i-1]:
-                growth_steps += 1
-            elif ranks[i] < ranks[i-1]:
-                growth_steps -= 1
+        growth_steps = sum(
+            1 if ranks[i] > ranks[i - 1] else (-1 if ranks[i] < ranks[i - 1] else 0)
+            for i in range(1, len(ranks))
+        )
         rank_growth = growth_steps / (len(ranks) - 1)
-        
-    # Average job tenure in months
+
     total_months = sum(j.get("duration_months", 0) for j in history)
-    avg_tenure_months = total_months / len(history) if len(history) > 0 else 0
-    
-    # Compute base progression score
+    avg_tenure_months = total_months / len(history) if history else 0
+
     prog_score = 50 + (rank_growth * 30)
-    
-    # Tenure/stability adjustment
-    # Penalize extreme job hopping (< 18 months average tenure)
+
+    # Penalise frequent job-hopping; reward loyalty
     if avg_tenure_months < 18:
         prog_score -= (18 - avg_tenure_months) * 2
-    # Reward long stays (> 36 months average tenure)
     elif avg_tenure_months > 36:
         prog_score += min(15, (avg_tenure_months - 36) * 0.5)
-        
+
     return max(0, min(100, prog_score))
+
 
 def calculate_founder_mindset(candidate):
     """
-    Computes a Founder Mindset score (0-100) based on startup key terms,
-    GitHub contributions, leadership roles, and side projects.
+    Computes a Founder Mindset score (0–100).
+
+    Based on leadership titles, startup/hacker vocabulary in job descriptions,
+    and GitHub activity. Missing GitHub linkage applies a small penalty.
     """
-    score = 40 # baseline
-    
+    score = 40  # baseline
+
     profile = candidate.get("profile", {})
     history = candidate.get("career_history", [])
     signals = candidate.get("redrob_signals", {})
-    
-    # Check job titles for founder/leadership
-    has_leadership_title = False
-    for job in history:
-        t = job.get("title", "").lower()
-        if "founder" in t or "cto" in t or "co-founder" in t or "founding" in t or "lead" in t:
-            has_leadership_title = True
-            
+
+    has_leadership_title = any(
+        kw in job.get("title", "").lower()
+        for job in history
+        for kw in ("founder", "cto", "co-founder", "founding", "lead")
+    )
     if has_leadership_title:
         score += 20
-        
-    # Check descriptions for hacker/startup keywords
+
     startup_keywords = [
-        "startup", "founding", "prototype", "shipped", "launched", 
-        "mvp", "zero to one", "ownership", "scale-up", "open-source", "diy"
+        "startup", "founding", "prototype", "shipped", "launched",
+        "mvp", "zero to one", "ownership", "scale-up", "open-source", "diy",
     ]
-    keyword_matches = 0
-    for job in history:
-        desc = job.get("description", "").lower()
-        for kw in startup_keywords:
-            if kw in desc:
-                keyword_matches += 1
-                
+    keyword_matches = sum(
+        kw in job.get("description", "").lower()
+        for job in history
+        for kw in startup_keywords
+    )
     score += min(20, keyword_matches * 3)
-    
-    # Github activity contribution
+
     github_score = signals.get("github_activity_score", -1)
     if github_score > 0:
         score += (github_score / 100.0) * 20
     elif github_score == -1:
-        # no Github linked penalty
-        score -= 10
-        
+        score -= 10  # no GitHub profile linked
+
     return max(0, min(100, score))
+
 
 def calculate_product_dna(history):
     """
-    Returns the percentage of candidate's career duration spent at product companies
-    versus IT services companies.
+    Returns the fraction of career duration (0–1) spent at product companies.
+
+    Companies present in SERVICES_COMPANIES are treated as IT services and
+    excluded from the product-months count.
     """
     if not history:
         return 0.5
-        
+
     total_months = 0
     product_months = 0
-    
+
     for job in history:
         comp = job.get("company", "").lower()
         dur = job.get("duration_months", 0)
         total_months += dur
-        
-        # Check if company is in services list
-        is_service = False
-        for s_comp in SERVICES_COMPANIES:
-            if s_comp in comp:
-                is_service = True
-                break
-                
+
+        is_service = any(s in comp for s in SERVICES_COMPANIES)
         if not is_service:
             product_months += dur
-            
-    if total_months == 0:
-        return 0.5
-        
-    return product_months / total_months
+
+    return product_months / total_months if total_months > 0 else 0.5
+
 
 def get_skill_freshness(skills, history):
     """
-    Evaluates skill freshness by checking the overlap of key skills in recent jobs.
+    Returns a freshness coefficient (0.6–1.0) indicating how recently
+    the candidate has applied their listed skills.
+
+    Checks whether skill names appear in the current (or most recent) job
+    description and title.
     """
-    # Simply mapping: if candidate has skill assessments or has used skills recently
-    # For this challenge, we check if skills have positive duration and endorsements.
-    # Return a freshness coefficient (0.5 to 1.0)
     if not skills:
         return 0.5
-    
+
+    current_job = next((j for j in history if j.get("is_current")), None)
+    if not current_job and history:
+        current_job = sorted(history, key=lambda x: x.get("start_date", ""), reverse=True)[0]
+
     recent_skills = set()
-    # Sort history to find the current or last job
-    if history:
-        # Get the current job or the one with latest start_date
-        current_job = next((j for j in history if j.get("is_current")), None)
-        if not current_job:
-            # get job with max start date
-            sorted_jobs = sorted(history, key=lambda x: x.get("start_date", ""), reverse=True)
-            current_job = sorted_jobs[0]
-            
-        desc = current_job.get("description", "").lower()
+    if current_job:
+        desc  = current_job.get("description", "").lower()
         title = current_job.get("title", "").lower()
-        
-        # Look for skills in current job description/title
         for sk in skills:
             name = sk.get("name", "").lower()
             if name in desc or name in title:
                 recent_skills.add(name)
-                
-    fresh_ratio = len(recent_skills) / len(skills) if len(skills) > 0 else 0
+
+    fresh_ratio = len(recent_skills) / len(skills) if skills else 0
     return 0.6 + (fresh_ratio * 0.4)
 
+
 def calculate_notice_period_modifier(notice_days):
-    """Score notice period: sub-30 days is best (1.0). 150 days is worst (0.1)."""
+    """
+    Returns a multiplier (0.1–1.0) based on notice period.
+
+    ≤ 30 days → 1.0 (best), > 90 days → 0.1 (heavy penalty).
+    """
     if notice_days <= 30:
         return 1.0
     elif notice_days <= 60:
@@ -205,65 +206,66 @@ def calculate_notice_period_modifier(notice_days):
     elif notice_days <= 90:
         return 0.4
     else:
-        # 120 or 150 days notice period gets heavily penalized
         return 0.1
+
 
 def calculate_location_modifier(profile):
     """
-    Noida/Pune preferred. Relocation candidates from Tier-1 welcome.
+    Returns a location preference multiplier (0.3–1.0).
+
+    Noida / Pune / NCR preferred (1.0). Tier-1 Indian cities eligible for
+    relocation (0.8). Outside India penalised (0.3).
     """
-    loc = profile.get("location", "").lower()
+    loc     = profile.get("location", "").lower()
     country = profile.get("country", "").lower()
-    
+
     preferred_cities = ["noida", "pune", "delhi", "gurgaon", "ncr", "ghaziabad", "faridabad"]
-    tier1_cities = ["bangalore", "bengaluru", "hyderabad", "mumbai", "chennai", "kolkata"]
-    
-    # Noida/Pune/NCR
+    tier1_cities     = ["bangalore", "bengaluru", "hyderabad", "mumbai", "chennai", "kolkata"]
+
     if any(city in loc for city in preferred_cities):
         return 1.0
-    # Tier-1 Indian cities
     elif any(city in loc for city in tier1_cities):
-        # Relocation potential
-        return 0.8
-    # Outside India
+        return 0.8  # relocation feasible
     elif country != "india":
         return 0.3
     else:
         return 0.5
 
+
 def calculate_behavioral_multiplier(signals, benchmark_date_str="2026-06-22"):
     """
-    Computes a multiplier based on platform log-in active status, response rate, etc.
+    Computes a behavioral engagement multiplier (0.1–1.3).
+
+    Factors:
+        - Login recency (inactive > 6 months → 0.3×)
+        - Recruiter response rate (< 15% → 0.4×)
+        - Open-to-work flag (active → 1.15×)
     """
     mult = 1.0
-    
-    # 1. Login Recency
+
     last_act = signals.get("last_active_date")
     if last_act:
         try:
-            la_dt = datetime.strptime(last_act, "%Y-%m-%d")
-            benchmark = datetime.strptime(benchmark_date_str, "%Y-%m-%d")
-            days_inactive = (benchmark - la_dt).days
-            
-            if days_inactive > 180: # > 6 months inactive
+            days_inactive = (
+                datetime.strptime(benchmark_date_str, "%Y-%m-%d")
+                - datetime.strptime(last_act, "%Y-%m-%d")
+            ).days
+            if days_inactive > 180:
                 mult *= 0.3
-            elif days_inactive > 90: # > 3 months inactive
+            elif days_inactive > 90:
                 mult *= 0.6
-            elif days_inactive > 30: # > 1 month inactive
+            elif days_inactive > 30:
                 mult *= 0.85
-        except:
+        except Exception:
             pass
-            
-    # 2. Recruiter Response Rate
+
     rrr = signals.get("recruiter_response_rate", 0)
-    # Low response rates down-weight availability
     if rrr < 0.15:
         mult *= 0.4
     elif rrr < 0.40:
         mult *= 0.75
-        
-    # 3. Open to work flag
+
     if signals.get("open_to_work_flag"):
         mult *= 1.15
-        
+
     return min(1.3, max(0.1, mult))

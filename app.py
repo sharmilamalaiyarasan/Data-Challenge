@@ -1,35 +1,37 @@
 """
-app.py — Streamlit Sandbox & XAI Dashboard for the AI Recruiter system.
+app.py — Streamlit XAI Dashboard for the AI Recruiter system.
 
 Run with:
     streamlit run app.py
 """
 
+# Standard library
 import os
 import sys
 import time
 from pathlib import Path
 
+# Third-party
 import numpy as np
 import pandas as pd
 import streamlit as st
 
+# Local
 import config
-from pipeline import run_pipeline, load_candidates
+from pipeline import load_candidates, run_pipeline
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Auto-resolve default file paths
+# File path auto-resolution
 # Priority: script directory → Streamlit Cloud /mount/src/<repo>/ subdirs
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _find_file(filename: str) -> str | None:
     """Return the first existing path for *filename*, searching common locations."""
     candidates = [
-        Path(config.BASE_DIR) / filename,           # local / repo root (most common)
+        Path(config.BASE_DIR) / filename,
         Path(__file__).parent / filename,
     ]
-    # Streamlit Cloud mounts repos under /mount/src/<repo-name>/
     mount = Path("/mount/src")
     if mount.exists():
         for sub in sorted(mount.iterdir()):
@@ -53,7 +55,7 @@ st.set_page_config(
     page_title="AI Recruiter — Candidate Discovery",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -95,9 +97,9 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stars { color: #f59e0b; font-size: 18px; letter-spacing: 2px; }
 
 .pill { display:inline-block; padding:3px 12px; border-radius:999px; font-size:12px; font-weight:600; }
-.pill-green { background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.4); }
+.pill-green  { background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.4); }
 .pill-yellow { background:rgba(245,158,11,0.2);color:#fcd34d;border:1px solid rgba(245,158,11,0.4); }
-.pill-red { background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.4); }
+.pill-red    { background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.4); }
 
 .section-header { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#7c3aed; margin-bottom:4px; }
 
@@ -121,9 +123,11 @@ def stars(n: int) -> str:
     n = max(1, min(5, int(n)))
     return "★" * n + "☆" * (5 - n)
 
+
 def risk_html(label: str) -> str:
     css = {"Low": "risk-low", "Medium": "risk-med", "High": "risk-high"}.get(label, "risk-low")
     return f'<span class="{css}">{label}</span>'
+
 
 def rec_pill(rec: str) -> str:
     if "Highly" in rec:
@@ -132,6 +136,7 @@ def rec_pill(rec: str) -> str:
         return f'<span class="pill pill-yellow">{rec}</span>'
     else:
         return f'<span class="pill pill-red">{rec}</span>'
+
 
 def rank_badge(rank: int) -> str:
     cls = {1: "rank-1", 2: "rank-2", 3: "rank-3"}.get(rank, "rank-n")
@@ -148,7 +153,6 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### ⚙️ Configuration")
 
-    # ── Auto-detected file status ────────────────────────────────────────────
     candidates_path = _candidates_path
     jd_path         = _jd_path
 
@@ -169,14 +173,15 @@ with st.sidebar:
             )
 
     _status(candidates_path, os.path.basename(candidates_path) if candidates_path else "candidates.jsonl")
-    _status(jd_path, os.path.basename(jd_path) if jd_path else "job_description.md")
+    _status(jd_path,         os.path.basename(jd_path)         if jd_path         else "job_description.md")
+
     persona = st.selectbox(
         "Recruiter Persona",
         options=list(config.PERSONAS.keys()),
         format_func=lambda k: {
-            "startup_founder": "🚀 Startup Founder",
-            "enterprise_recruiter": "🏢 Enterprise Recruiter"
-        }.get(k, k)
+            "startup_founder":      "🚀 Startup Founder",
+            "enterprise_recruiter": "🏢 Enterprise Recruiter",
+        }.get(k, k),
     )
     top_n = st.slider("Top N candidates to rank", 10, 200, 100, step=10)
 
@@ -191,10 +196,10 @@ with st.sidebar:
     w_product  = st.slider("Product Experience", 0.0, 1.0, 0.15, 0.05)
 
     custom_weights = {
-        "semantic_match":    w_semantic,
-        "skills":            w_skills,
-        "career_growth":     w_growth,
-        "founder_mindset":   w_founder,
+        "semantic_match":     w_semantic,
+        "skills":             w_skills,
+        "career_growth":      w_growth,
+        "founder_mindset":    w_founder,
         "product_experience": w_product,
     }
 
@@ -230,24 +235,25 @@ if "run_time" not in st.session_state: st.session_state.run_time = None
 if run_btn:
     if not candidates_path or not os.path.exists(candidates_path):
         st.error(
-            "❌ No candidate file (**candidates.jsonl** or **sample_candidates.json**) could be found automatically. "
-            "Please ensure at least one of these files exists in the repository directory."
+            "❌ No candidate file (**candidates.jsonl** or **sample_candidates.json**) "
+            "could be found automatically. Please ensure at least one of these files "
+            "exists in the repository directory."
         )
     else:
         with st.spinner("Running ranking pipeline… (first run builds embedding cache ~3 min)"):
             jd_text = ""
-            if os.path.exists(jd_path):
+            if jd_path and os.path.exists(jd_path):
                 with open(jd_path, "r", encoding="utf-8") as f:
                     jd_text = f.read()
 
             config.PERSONAS[persona]["weights"] = custom_weights
 
-            t0 = time.time()
+            t0      = time.time()
             results = run_pipeline(
                 candidates_path=candidates_path,
                 jd_text=jd_text,
                 persona=persona,
-                top_n=top_n
+                top_n=top_n,
             )
             elapsed = time.time() - t0
 
@@ -282,11 +288,11 @@ if st.session_state.results:
         st.markdown(f"**Showing {len(filtered)} candidates** (score ≥ {min_score:.0f})")
 
         for rank, row in enumerate(filtered, start=1):
-            exp       = row.get("explainability", {}) or {}
-            bd        = exp.get("breakdown", {}) or {}
-            rec       = exp.get("recommendation", "—")
-            strengths  = exp.get("strengths", []) or []
-            weaknesses = exp.get("weaknesses", []) or []
+            exp        = row.get("explainability", {}) or {}
+            bd         = exp.get("breakdown",             {}) or {}
+            rec        = exp.get("recommendation",        "—")
+            strengths  = exp.get("strengths",             []) or []
+            weaknesses = exp.get("weaknesses",            []) or []
             contribs   = exp.get("feature_contributions", []) or []
 
             risk_lbl   = bd.get("risk", "Low")
@@ -342,12 +348,11 @@ if st.session_state.results:
                             f"**Confidence: {row['confidence']:.0f}%**"
                         )
 
-                        # Table-style bar chart (always works, no JS needed)
-                        max_c = max((abs(c.get("contribution", 0)) for c in contribs), default=1)
+                        max_c     = max((abs(c.get("contribution", 0)) for c in contribs), default=1)
                         rows_html = ""
                         for item in contribs:
-                            lbl  = item.get("label", "")
-                            val  = item.get("value", 0.0)
+                            lbl  = item.get("label",        "")
+                            val  = item.get("value",        0.0)
                             cont = item.get("contribution", 0.0)
                             bar  = int(abs(cont) / max(max_c, 0.01) * 25)
                             col  = "#6ee7b7" if cont >= 0 else "#fca5a5"
@@ -358,7 +363,7 @@ if st.session_state.results:
                                 f"font-size:13px;white-space:nowrap;min-width:160px'>{lbl}</td>"
                                 f"<td style='font-family:monospace;color:{col};"
                                 f"font-size:13px;letter-spacing:-0.5px;min-width:180px'>"
-                                f"{'&#9608;' * bar}{'&#9617;' * (25-bar)}</td>"
+                                f"{'&#9608;' * bar}{'&#9617;' * (25 - bar)}</td>"
                                 f"<td style='padding:3px 0 3px 10px;color:{col};"
                                 f"font-weight:700;font-size:13px'>{sign}{cont:.1f}</td>"
                                 f"</tr>"
@@ -366,7 +371,7 @@ if st.session_state.results:
                         st.markdown(
                             f"<table style='border-collapse:collapse;margin-top:8px'>"
                             f"{rows_html}</table>",
-                            unsafe_allow_html=True
+                            unsafe_allow_html=True,
                         )
 
             if rank >= 30:
@@ -397,7 +402,7 @@ if st.session_state.results:
             column_config={
                 "Score":      st.column_config.ProgressColumn("Score",      min_value=0, max_value=100),
                 "Confidence": st.column_config.ProgressColumn("Confidence", min_value=0, max_value=100),
-            }
+            },
         )
         csv_bytes = df.to_csv(index=False).encode("utf-8")
         st.download_button("⬇️ Download CSV", data=csv_bytes,
@@ -406,29 +411,34 @@ if st.session_state.results:
     # ─── TAB 3: Analytics ─────────────────────────────────────────────────────
     with tab_analytics:
         all_scores = [r["final_score"] for r in filtered]
-        risks = [(r.get("explainability") or {}).get("breakdown", {}).get("risk", "Low")
-                 for r in filtered]
+        risks      = [
+            (r.get("explainability") or {}).get("breakdown", {}).get("risk", "Low")
+            for r in filtered
+        ]
 
         col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Top Score",     f"{max(all_scores):.1f}"       if all_scores else "—")
-        col2.metric("Avg Score",     f"{np.mean(all_scores):.1f}"   if all_scores else "—")
-        col3.metric("High Risk",     risks.count("High"))
-        col4.metric("Low Risk",      risks.count("Low"))
+        col1.metric("Top Score",  f"{max(all_scores):.1f}"     if all_scores else "—")
+        col2.metric("Avg Score",  f"{np.mean(all_scores):.1f}" if all_scores else "—")
+        col3.metric("High Risk",  risks.count("High"))
+        col4.metric("Low Risk",   risks.count("Low"))
 
         st.markdown("#### Score Distribution")
         if all_scores:
             hist_df = pd.DataFrame({"Score": all_scores})
-            # Group into 10 bins and format the interval labels as strings
-            counts = hist_df["Score"].value_counts(bins=10).sort_index()
-            counts.index = [f"{max(0.0, round(interval.left, 1))} - {round(interval.right, 1)}" for interval in counts.index]
+            counts  = hist_df["Score"].value_counts(bins=10).sort_index()
+            counts.index = [
+                f"{max(0.0, round(interval.left, 1))} - {round(interval.right, 1)}"
+                for interval in counts.index
+            ]
             st.bar_chart(counts)
         else:
             st.info("No scores to display.")
 
         st.markdown("#### Risk Breakdown")
-        st.bar_chart(pd.DataFrame({
-            "Count": [risks.count("Low"), risks.count("Medium"), risks.count("High")]
-        }, index=["Low", "Medium", "High"]))
+        st.bar_chart(pd.DataFrame(
+            {"Count": [risks.count("Low"), risks.count("Medium"), risks.count("High")]},
+            index=["Low", "Medium", "High"],
+        ))
 
         st.markdown("#### Recommendation Breakdown")
         verdicts = pd.Series([
@@ -437,7 +447,6 @@ if st.session_state.results:
         ]).value_counts()
         st.bar_chart(verdicts)
 
-        # Avg feature contribution across top candidates
         st.markdown("#### Avg Feature Contributions (top 20)")
         all_contribs: dict[str, list] = {}
         for r in filtered[:20]:
@@ -446,8 +455,9 @@ if st.session_state.results:
                 all_contribs.setdefault(lbl, []).append(item.get("contribution", 0.0))
         if all_contribs:
             avg_df = pd.DataFrame({
-                "Avg Contribution": {k: round(sum(v)/len(v), 1)
-                                     for k, v in all_contribs.items()}
+                "Avg Contribution": {
+                    k: round(sum(v) / len(v), 1) for k, v in all_contribs.items()
+                }
             })
             st.bar_chart(avg_df)
 
