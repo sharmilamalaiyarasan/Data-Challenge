@@ -8,6 +8,7 @@ Run with:
 import os
 import sys
 import time
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -15,6 +16,33 @@ import streamlit as st
 
 import config
 from pipeline import run_pipeline, load_candidates
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Auto-resolve default file paths
+# Priority: script directory → Streamlit Cloud /mount/src/<repo>/ subdirs
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _find_file(filename: str) -> str | None:
+    """Return the first existing path for *filename*, searching common locations."""
+    candidates = [
+        Path(config.BASE_DIR) / filename,           # local / repo root (most common)
+        Path(__file__).parent / filename,
+    ]
+    # Streamlit Cloud mounts repos under /mount/src/<repo-name>/
+    mount = Path("/mount/src")
+    if mount.exists():
+        for sub in sorted(mount.iterdir()):
+            candidates.append(sub / filename)
+
+    for p in candidates:
+        if p.exists():
+            return str(p)
+    return None
+
+
+_candidates_path = _find_file("candidates.jsonl")
+_jd_path         = _find_file("job_description.md")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -120,9 +148,28 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### ⚙️ Configuration")
 
-    candidates_path = st.text_input("Candidates file (.jsonl)", value=config.DATA_FILE)
-    jd_path = st.text_input("Job Description file",
-                             value=os.path.join(config.BASE_DIR, "job_description.md"))
+    # ── Auto-detected file status ────────────────────────────────────────────
+    candidates_path = _candidates_path
+    jd_path         = _jd_path
+
+    def _status(path: str | None, label: str) -> None:
+        if path:
+            st.markdown(
+                f"<div style='font-size:12px;padding:4px 8px;border-radius:6px;"
+                f"background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);"
+                f"color:#6ee7b7;margin-bottom:6px;'>✅ <b>{label}</b> auto-loaded</div>",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"<div style='font-size:12px;padding:4px 8px;border-radius:6px;"
+                f"background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);"
+                f"color:#fca5a5;margin-bottom:6px;'>⚠️ <b>{label}</b> not found</div>",
+                unsafe_allow_html=True,
+            )
+
+    _status(candidates_path, "candidates.jsonl")
+    _status(jd_path, "job_description.md")
     persona = st.selectbox(
         "Recruiter Persona",
         options=list(config.PERSONAS.keys()),
@@ -181,8 +228,11 @@ if "run_time" not in st.session_state: st.session_state.run_time = None
 
 # ── Run pipeline ──────────────────────────────────────────────────────────────
 if run_btn:
-    if not os.path.exists(candidates_path):
-        st.error(f"Candidates file not found: `{candidates_path}`")
+    if not candidates_path or not os.path.exists(candidates_path):
+        st.error(
+            "❌ **candidates.jsonl** could not be found automatically. "
+            "Make sure the file is in the same directory as `app.py`."
+        )
     else:
         with st.spinner("Running ranking pipeline… (first run builds embedding cache ~3 min)"):
             jd_text = ""

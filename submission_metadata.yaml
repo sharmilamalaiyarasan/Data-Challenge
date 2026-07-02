@@ -6,14 +6,26 @@
 # ============================================================================
 # Team identity
 # ============================================================================
-team_name: "TBD"                   # <-- Replace with your team name before submission
+team_name: "Velmora"
 
 primary_contact:
-  name: "TBD"                       # <-- Replace with full name
-  email: "TBD"                      # <-- Replace with email address
-  phone: "TBD"                      # <-- Replace with +91-XXXXXXXXXX
+  name: "Sharmila Malaiyarasan"
+  email: "sharmilamalaiyarasan@gmail.com"
+  phone: "+91XXXXXXXXXX"
 
-team_members: []
+team_members:
+  - name: "Sharmila Malaiyarasan"
+    email: "sharmilamalaiyarasan@gmail.com"
+    role: "AI Engineer"
+  - name: "Parkavi C"
+    email: "parakavi.cb24@bitsathy.ac.in"
+    role: "Data Analytics"
+  - name: "Tabitha Merin Clitus"
+    email: "tabithaclitus@gmail.com"
+    role: "Data Scientist"
+  - name: "Kanigasri S"
+    email: "kanigasris.cb24@bitsathy.ac.in"
+    role: "Web Developer"
 # <-- Add members before submission, e.g.:
 #   - name: "Sharmila Malaiyarasan"
 #     email: "your@email.com"
