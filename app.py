@@ -416,8 +416,14 @@ if st.session_state.results:
         col4.metric("Low Risk",      risks.count("Low"))
 
         st.markdown("#### Score Distribution")
-        hist_df = pd.DataFrame({"Score": all_scores})
-        st.bar_chart(hist_df["Score"].value_counts(bins=20).sort_index())
+        if all_scores:
+            hist_df = pd.DataFrame({"Score": all_scores})
+            # Group into 10 bins and format the interval labels as strings
+            counts = hist_df["Score"].value_counts(bins=10).sort_index()
+            counts.index = [f"{max(0.0, round(interval.left, 1))} - {round(interval.right, 1)}" for interval in counts.index]
+            st.bar_chart(counts)
+        else:
+            st.info("No scores to display.")
 
         st.markdown("#### Risk Breakdown")
         st.bar_chart(pd.DataFrame({
